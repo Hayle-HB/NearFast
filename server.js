@@ -1,16 +1,34 @@
-// Load environment variables from the .env file
 require("dotenv").config();
-
 const express = require("express");
+const mongoose = require("mongoose");
+
 const app = express();
 
-// Use the port from .env, or default to 3000
-const port = process.env.PORT || 3000;
+// Middleware to parse JSON before routes
+app.use(express.json());
 
+// Import routes
+const productRoutes = require("./routes/productRoutes.js");
+
+// Use routes after middleware
+app.use("/api", productRoutes);
+
+// Root route
 app.get("/", (req, res) => {
-  res.send("Hello, World!");
+  res.send("We will win this race!");
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+// MongoDB connection
+const port = process.env.PORT || 3000;
+const MongoDB_URL = process.env.MONGODB_URL;
+
+mongoose
+  .connect(MongoDB_URL)
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`MongoDB connected and Server running on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection error:", error);
+  });
