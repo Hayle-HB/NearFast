@@ -9,9 +9,11 @@ app.use(express.json());
 
 // Import routes
 const productRoutes = require("./routes/productRoutes.js");
+const userRoutes = require("./routes/userRoutes.js");
 
 // Use routes after middleware
 app.use("/api", productRoutes);
+app.use("/api", userRoutes);
 
 // Root route
 app.get("/", (req, res) => {
